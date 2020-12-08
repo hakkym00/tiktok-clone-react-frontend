@@ -1,23 +1,35 @@
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react'
+import Axios from 'axios'
 import './App.css';
+import Video from './components/Video';
 
 function App() {
+  const [data, setData] = useState([])
+  useEffect(() => {
+    Axios.get('/tiktok').then((res) => {
+      setData(res.data)
+    }).catch(e => console.log(e.message))
+  }, [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <div className="app__container">
+        {
+        data.map(author => (
+          <Video 
+          key={author._id}
+          url= {author.url}
+          channel={author.channel}
+          description={author.description}
+          song={author.song}
+          likes ={author.likes}
+          messages={author.messages} 
+          shares={author.shares}
+          />
+          ))
+        }
+
+      </div>
+
     </div>
   );
 }
